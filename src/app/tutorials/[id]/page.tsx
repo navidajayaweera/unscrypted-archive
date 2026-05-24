@@ -1,20 +1,26 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import { prisma } from "@/lib/db";
+import MarkdownContent from "@/components/tutorials/MarkdownContent";
+import { fetchApi } from "@/lib/api";
 import { CATEGORY_COLORS, DIFFICULTY_COLORS } from "@/lib/utils";
+import type { Tutorial } from "@/types";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function TutorialDetailPage({ params }: Props) {
   const { id } = await params;
-  const tutorial = await prisma.tutorial.findUnique({ where: { id } });
-  if (!tutorial) notFound();
 
-  const related = await prisma.tutorial.findMany({
-    where: { category: tutorial.category, NOT: { id: tutorial.id } },
-    take: 3,
-  });
+  let tutorial: Tutorial;
+  try {
+    tutorial = await fetchApi<Tutorial>(`/api/tutorials/${id}`);
+  } catch {
+    notFound();
+  }
+
+  const categoryTutorials = await fetchApi<Tutorial[]>(
+    `/api/tutorials?category=${tutorial.category}`
+  );
+  const related = categoryTutorials.filter((r) => r.id !== tutorial.id).slice(0, 3);
 
   return (
     <div className="space-y-6">
@@ -39,7 +45,7 @@ export default async function TutorialDetailPage({ params }: Props) {
       </div>
 
       <article className="prose-archive rounded border border-amber-900/30 bg-zinc-900/40 p-6">
-        <ReactMarkdown>{tutorial.content}</ReactMarkdown>
+        <MarkdownContent content={tutorial.content} />
       </article>
 
       {related.length > 0 && (

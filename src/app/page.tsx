@@ -1,43 +1,10 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { fetchApi } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
-
-async function getStats() {
-  const [
-    totalDocuments,
-    totalSurvivors,
-    totalSkills,
-    totalShelters,
-    totalTutorials,
-    recentDocuments,
-    recentSurvivors,
-  ] = await Promise.all([
-    prisma.knowledge.count(),
-    prisma.survivor.count(),
-    prisma.skill.count(),
-    prisma.shelterLocation.count(),
-    prisma.tutorial.count(),
-    prisma.knowledge.findMany({ orderBy: { uploadedAt: "desc" }, take: 5 }),
-    prisma.survivor.findMany({
-      orderBy: { registeredAt: "desc" },
-      take: 5,
-      include: { skills: true },
-    }),
-  ]);
-
-  return {
-    totalDocuments,
-    totalSurvivors,
-    totalSkills,
-    totalShelters,
-    totalTutorials,
-    recentDocuments,
-    recentSurvivors,
-  };
-}
+import type { Stats } from "@/types";
 
 export default async function DashboardPage() {
-  const stats = await getStats();
+  const stats = await fetchApi<Stats>("/api/stats");
 
   const metrics = [
     { label: "Total Documents", value: stats.totalDocuments },
@@ -118,7 +85,7 @@ export default async function DashboardPage() {
                   <span className="text-xs text-zinc-500">{item.type}</span>
                   <p className="text-zinc-300">{item.name}</p>
                 </div>
-                <span className="text-xs text-zinc-600">{formatDate(item.date.toISOString())}</span>
+                <span className="text-xs text-zinc-600">{formatDate(item.date)}</span>
               </div>
             ))}
           </div>

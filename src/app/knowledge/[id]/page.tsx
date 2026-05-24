@@ -1,25 +1,26 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/db";
+import { fetchApi } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
+import type { Knowledge } from "@/types";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function KnowledgeDetailPage({ params }: Props) {
   const { id } = await params;
-  const doc = await prisma.knowledge.findUnique({ where: { id } });
-  if (!doc) notFound();
+
+  let doc: Knowledge;
+  try {
+    doc = await fetchApi<Knowledge>(`/api/knowledge/${id}`);
+  } catch {
+    notFound();
+  }
 
   const firstTag = doc.tags.split(",")[0]?.trim();
-  const related = firstTag
-    ? await prisma.knowledge.findMany({
-        where: {
-          tags: { contains: firstTag },
-          NOT: { id: doc.id },
-        },
-        take: 3,
-      })
+  const allWithTag = firstTag
+    ? await fetchApi<Knowledge[]>(`/api/knowledge?tag=${firstTag}`)
     : [];
+  const related = allWithTag.filter((r) => r.id !== doc.id).slice(0, 3);
 
   return (
     <div className="space-y-6">
@@ -40,7 +41,7 @@ export default async function KnowledgeDetailPage({ params }: Props) {
           ))}
         </div>
         <p className="mt-2 text-xs text-zinc-600">
-          Uploaded {formatDate(doc.uploadedAt.toISOString())}
+          Uploaded {formatDate(doc.uploadedAt)}
         </p>
       </div>
 

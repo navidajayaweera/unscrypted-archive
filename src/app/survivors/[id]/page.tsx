@@ -1,17 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/db";
+import { fetchApi } from "@/lib/api";
 import { formatDate, SKILL_COLORS } from "@/lib/utils";
+import type { Survivor } from "@/types";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function SurvivorDetailPage({ params }: Props) {
   const { id } = await params;
-  const survivor = await prisma.survivor.findUnique({
-    where: { id },
-    include: { skills: true },
-  });
-  if (!survivor) notFound();
+
+  let survivor: Survivor;
+  try {
+    survivor = await fetchApi<Survivor>(`/api/survivors/${id}`);
+  } catch {
+    notFound();
+  }
 
   const grouped = survivor.skills.reduce<Record<string, typeof survivor.skills>>(
     (acc, skill) => {
@@ -41,7 +44,7 @@ export default async function SurvivorDetailPage({ params }: Props) {
 
       <div className="flex gap-6 text-sm text-zinc-500">
         <span>Age: {survivor.age}</span>
-        <span>Registered: {formatDate(survivor.registeredAt.toISOString())}</span>
+        <span>Registered: {formatDate(survivor.registeredAt)}</span>
       </div>
 
       <section>
