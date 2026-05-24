@@ -1,62 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { prisma } from "@/lib/db";
+import { NextRequest, NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
-export async function GET(request: NextRequest) {
-  try {
-    const tag = request.nextUrl.searchParams.get("tag");
+// GET all documents (with optional ?tag= filter)
+export async function GET(req: NextRequest) {
+  const tag = req.nextUrl.searchParams.get('tag')
 
-    const knowledge = await prisma.knowledge.findMany({
-      where: tag
-        ? {
-            tags: {
-              contains: tag,
-            },
-          }
-        : undefined,
-      orderBy: { uploadedAt: "desc" },
-    });
+  let query = supabase.from('knowledge').select('*')
 
-    return NextResponse.json(knowledge);
-  } catch (error) {
-    console.error("GET /api/knowledge error:", error);
-    return NextResponse.json({ error: "Failed to fetch knowledge" }, { status: 500 });
+  if (tag) {
+    query = query.ilike('tags', `%${tag}%`)
   }
+
+  const { data, error } = await query
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  return NextResponse.json(data)
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData();
-    const title = formData.get("title")?.toString().trim();
-    const description = formData.get("description")?.toString().trim() ?? "";
-    const tags = formData.get("tags")?.toString().trim() ?? "";
-    const file = formData.get("file");
+// POST upload new document
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+  const { title, description, filePath, tags } = body
 
-    if (!title) {
-      return NextResponse.json({ error: "Title is required" }, { status: 400 });
-    }
+  const { data, error } = await supabase
+    .from('knowledge')
+    .insert([{ title, description, filePath, tags }])
+    .select()
 
-    let filePath = "";
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-    if (file instanceof File && file.size > 0) {
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
-      await mkdir(uploadsDir, { recursive: true });
-
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const uniqueName = `${Date.now()}-${safeName}`;
-      const buffer = Buffer.from(await file.arrayBuffer());
-      await writeFile(path.join(uploadsDir, uniqueName), buffer);
-      filePath = `/uploads/${uniqueName}`;
-    }
-
-    const knowledge = await prisma.knowledge.create({
-      data: { title, description, filePath, tags },
-    });
-
-    return NextResponse.json(knowledge, { status: 201 });
-  } catch (error) {
-    console.error("POST /api/knowledge error:", error);
-    return NextResponse.json({ error: "Failed to create knowledge" }, { status: 500 });
-  }
+  return NextResponse.json(data[0], { status: 201 })
 }
