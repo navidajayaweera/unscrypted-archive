@@ -664,10 +664,27 @@ function EndpointCard({ ep }: { ep: Endpoint }) {
 
   function handleCopy(e: React.MouseEvent) {
     e.stopPropagation();
-    navigator.clipboard.writeText(ep.path).then(() => {
+
+    const done = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    });
+    };
+
+    // Secure context (HTTPS / localhost) → modern API
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(ep.path).then(done);
+      return;
+    }
+
+    // HTTP fallback → textarea + execCommand
+    const el = document.createElement("textarea");
+    el.value = ep.path;
+    el.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0";
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try { document.execCommand("copy"); done(); } catch { /* silent */ }
+    document.body.removeChild(el);
   }
 
   return (
