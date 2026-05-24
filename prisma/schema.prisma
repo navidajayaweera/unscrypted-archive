@@ -29,6 +29,26 @@ model Skill {
   id         String   @id @default(cuid())
   name       String
   category   String
-  survivor   Survivor @relation(fields: [survivorId], references: [id], onDelete: Cascade)
+  survivor   Survivor @relation(fields: [survivorId], references: [id])
   survivorId String
+}
+
+model ShelterLocation {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  lat         Float
+  lng         Float
+  capacity    Int
+  status      String
+  createdAt   DateTime @default(now())
+}
+
+model Tutorial {
+  id         String   @id @default(cuid())
+  title      String
+  category   String
+  content    String
+  difficulty String
+  createdAt  DateTime @default(now())
 }

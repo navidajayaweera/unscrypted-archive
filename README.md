@@ -13,6 +13,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Dashboard with stats and recent activity |
+| `/knowledge` | Knowledge Base list + upload |
+| `/knowledge/[id]` | Document detail |
+| `/survivors` | Survivor Registry list + register |
+| `/survivors/[id]` | Survivor profile |
+| `/shelters` | Shelter locations list + add |
+| `/tutorials` | Survival tutorials list + add |
+| `/tutorials/[id]` | Tutorial detail (markdown) |
+
 ## API Routes
 
 | Method | Route | Description |
@@ -25,11 +38,17 @@ Open [http://localhost:3000](http://localhost:3000).
 | POST | `/api/survivors` | Register new survivor |
 | GET | `/api/survivors/[id]` | Get survivor profile |
 | GET | `/api/skills` | List all skills, supports `?category=` filter |
-| GET | `/api/stats` | Dashboard counts |
+| GET | `/api/shelters` | List all shelter locations |
+| POST | `/api/shelters` | Add new shelter |
+| GET | `/api/shelters/[id]` | Get single shelter |
+| GET | `/api/tutorials` | List all, supports `?category=` filter |
+| POST | `/api/tutorials` | Create new tutorial |
+| GET | `/api/tutorials/[id]` | Get single tutorial |
+| GET | `/api/stats` | Dashboard counts + recent activity |
 
 ## Team Branches
 
-- `p1/foundation` — Backend & layout (this branch)
-- `p2/knowledge` — Knowledge Base UI
-- `p3/survivors` — Survivor Registry UI
-- `p4/dashboard` — Dashboard UI
+- `p1/foundation` — Project setup, schema, API scaffold, layout
+- `p2/knowledge-survivors-backend` — Knowledge & survivor API logic
+- `p3/shelters-tutorials-backend` — Shelter & tutorial API logic + seed
+- `p4/all-ui` — All pages and components
