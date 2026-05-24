@@ -9,6 +9,7 @@ const navItems = [
   { href: "/survivors", label: "Survivor Registry", icon: "◎", short: "SURV" },
   { href: "/shelters", label: "Shelter Locations", icon: "◆", short: "SHLT" },
   { href: "/tutorials", label: "Tutorials", icon: "◇", short: "TUTS" },
+  { href: "/assistant", label: "Archive AI", icon: "◌", short: "AI" },
 ];
 
 const sysLines = [
