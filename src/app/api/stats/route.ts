@@ -1,41 +1,44 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { supabase } from '@/lib/supabase'
+import { prisma } from '@/lib/db'
 
 export async function GET() {
-  // Get counts from SQLite
-  const [totalSurvivors, totalSkills, totalShelters, totalTutorials] = await Promise.all([
-    db.survivor.count(),
-    db.skill.count(),
-    db.shelterLocation.count(),
-    db.tutorial.count()
-  ])
+  try {
+    const [
+      totalDocuments,
+      totalSurvivors,
+      totalSkills,
+      totalShelters,
+      totalTutorials,
+      recentDocuments,
+      recentSurvivors,
+    ] = await Promise.all([
+      prisma.knowledge.count(),
+      prisma.survivor.count(),
+      prisma.skill.count(),
+      prisma.shelterLocation.count(),
+      prisma.tutorial.count(),
+      prisma.knowledge.findMany({
+        orderBy: { uploadedAt: 'desc' },
+        take: 5,
+      }),
+      prisma.survivor.findMany({
+        orderBy: { registeredAt: 'desc' },
+        take: 5,
+        include: { skills: true },
+      }),
+    ])
 
-  // Get recent survivors from SQLite
-  const recentSurvivors = await db.survivor.findMany({
-    take: 5,
-    orderBy: { registeredAt: 'desc' },
-    include: { skills: true }
-  })
-
-  // Get knowledge count + recent from Supabase
-  const { data: knowledgeData } = await supabase
-    .from('knowledge')
-    .select('*')
-    .order('uploadedAt', { ascending: false })
-    .limit(5)
-
-  const { count: totalDocuments } = await supabase
-    .from('knowledge')
-    .select('*', { count: 'exact', head: true })
-
-  return NextResponse.json({
-    totalDocuments: totalDocuments ?? 0,
-    totalSurvivors,
-    totalSkills,
-    totalShelters,
-    totalTutorials,
-    recentDocuments: knowledgeData ?? [],
-    recentSurvivors
-  })
+    return NextResponse.json({
+      totalDocuments,
+      totalSurvivors,
+      totalSkills,
+      totalShelters,
+      totalTutorials,
+      recentDocuments,
+      recentSurvivors,
+    })
+  } catch (error) {
+    console.error('GET /api/stats error:', error)
+    return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 })
+  }
 }

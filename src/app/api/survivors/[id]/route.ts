@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
+
+type RouteContext = { params: Promise<{ id: string }> }
 
 // GET one survivor with all skills
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const survivor = await db.survivor.findUnique({
-    where: { id: params.id },
-    include: { skills: true }
-  })
+export async function GET(_req: NextRequest, context: RouteContext) {
+  try {
+    const { id } = await context.params
 
-  if (!survivor) return NextResponse.json({ error: 'Survivor not found' }, { status: 404 })
+    const survivor = await prisma.survivor.findUnique({
+      where: { id },
+      include: { skills: true },
+    })
 
-  return NextResponse.json(survivor)
+    if (!survivor) {
+      return NextResponse.json({ error: 'Survivor not found' }, { status: 404 })
+    }
+
+    return NextResponse.json(survivor)
+  } catch (error) {
+    console.error('GET /api/survivors/[id] error:', error)
+    return NextResponse.json({ error: 'Failed to fetch survivor' }, { status: 500 })
+  }
 }

@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
 
 // GET all skills (with optional ?category= filter)
 export async function GET(req: NextRequest) {
-  const category = req.nextUrl.searchParams.get('category')
+  try {
+    const category = req.nextUrl.searchParams.get('category')
 
-  const skills = await db.skill.findMany({
-    where: category ? { category } : undefined
-  })
+    const skills = await prisma.skill.findMany({
+      where: category ? { category } : undefined,
+      orderBy: { name: 'asc' },
+    })
 
-  return NextResponse.json(skills)
+    return NextResponse.json(skills)
+  } catch (error) {
+    console.error('GET /api/skills error:', error)
+    return NextResponse.json({ error: 'Failed to fetch skills' }, { status: 500 })
+  }
 }
