@@ -43,6 +43,17 @@ export type Tutorial = {
   createdAt: string;
 };
 
+export type ContactMessage = {
+  id: string;
+  name: string;
+  sector: string;
+  location: string;
+  contactType: string;
+  message: string;
+  status: string;
+  submittedAt: string;
+};
+
 export type Stats = {
   totalDocuments: number;
   totalSurvivors: number;

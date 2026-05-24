@@ -52,3 +52,14 @@ model Tutorial {
   difficulty String
   createdAt  DateTime @default(now())
 }
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  sector      String
+  location    String
+  contactType String
+  message     String
+  status      String   @default("pending")
+  submittedAt DateTime @default(now())
+}

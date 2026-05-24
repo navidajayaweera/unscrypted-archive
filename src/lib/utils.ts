@@ -44,3 +44,16 @@ export const CATEGORY_COLORS: Record<string, string> = {
   food: "border-lime-700/50 bg-lime-950/40 text-lime-400",
   defense: "border-orange-700/50 bg-orange-950/40 text-orange-400",
 };
+
+export const SECTOR_COLORS: Record<string, string> = {
+  governance: "border-amber-700/50 bg-amber-950/40 text-amber-400",
+  health: "border-red-700/50 bg-red-950/40 text-red-400",
+  harvest: "border-lime-700/50 bg-lime-950/40 text-lime-400",
+  signal: "border-blue-700/50 bg-blue-950/40 text-blue-400",
+};
+
+export const CONTACT_STATUS_COLORS: Record<string, string> = {
+  pending: "border-amber-700/50 bg-amber-950/40 text-amber-400",
+  acknowledged: "border-blue-700/50 bg-blue-950/40 text-blue-400",
+  resolved: "border-emerald-700/50 bg-emerald-950/40 text-emerald-400",
+};

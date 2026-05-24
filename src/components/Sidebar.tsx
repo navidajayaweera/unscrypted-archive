@@ -4,18 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/",           label: "Dashboard",        icon: "◈", short: "DASH" },
-  { href: "/knowledge",  label: "Knowledge Base",   icon: "◉", short: "KNOW" },
-  { href: "/survivors",  label: "Survivor Registry",icon: "◎", short: "SURV" },
-  { href: "/shelters",   label: "Shelter Locations",icon: "◆", short: "SHLT" },
-  { href: "/tutorials",  label: "Tutorials",        icon: "◇", short: "TUTS" },
+  { href: "/", label: "Dashboard", icon: "◈", short: "DASH" },
+  { href: "/knowledge", label: "Knowledge Base", icon: "◉", short: "KNOW" },
+  { href: "/survivors", label: "Survivor Registry", icon: "◎", short: "SURV" },
+  { href: "/shelters", label: "Shelter Locations", icon: "◆", short: "SHLT" },
+  { href: "/tutorials", label: "Tutorials", icon: "◇", short: "TUTS" },
+  { href: "/contact", label: "Sector Contact", icon: "◌", short: "COMM" },
 ];
 
 const sysLines = [
-  { label: "MEM",  value: "4.7 TB",  color: "text-emerald-500" },
-  { label: "UPTIME", value: "1847d", color: "text-amber-500"   },
-  { label: "NODES",  value: "12/16", color: "text-amber-500"   },
-  { label: "SIGNAL", value: "WEAK",  color: "text-red-500"     },
+  { label: "MEM", value: "4.7 TB", color: "text-emerald-500" },
+  { label: "UPTIME", value: "1847d", color: "text-amber-500" },
+  { label: "NODES", value: "12/16", color: "text-amber-500" },
+  { label: "SIGNAL", value: "WEAK", color: "text-red-500" },
 ];
 
 export default function Sidebar() {
@@ -51,7 +52,9 @@ export default function Sidebar() {
                   : "text-zinc-500 hover:bg-zinc-900 hover:text-zinc-200 border border-transparent"
               }`}
             >
-              <span className={`text-xs ${isActive ? "text-amber-500" : "text-zinc-700 group-hover:text-zinc-500"}`}>
+              <span
+                className={`text-xs ${isActive ? "text-amber-500" : "text-zinc-700 group-hover:text-zinc-500"}`}
+              >
                 {item.icon}
               </span>
               <span className="truncate">{item.label}</span>

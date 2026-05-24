@@ -13,6 +13,7 @@ async function main() {
   await prisma.knowledge.deleteMany();
   await prisma.shelterLocation.deleteMany();
   await prisma.tutorial.deleteMany();
+  await prisma.contactMessage.deleteMany();
 
   await prisma.knowledge.createMany({
     data: [
@@ -348,6 +349,43 @@ Minimum 2-person teams, 4-hour shifts. Log all contacts in Archive registry.
 
 ## Prevention
 Layer clothing, stay dry, eat regularly in cold sectors.`,
+      },
+    ],
+  });
+
+  await prisma.contactMessage.createMany({
+    data: [
+      {
+        name: "Mara Chen",
+        sector: "health",
+        location: "Outpost Delta — Bunker 7",
+        contactType: "medical",
+        message: "Two survivors with dehydration symptoms. Request med kit drop and triage guidance.",
+        status: "acknowledged",
+      },
+      {
+        name: "Shelter Node 12",
+        sector: "governance",
+        location: "Sector 05 Archive Annex",
+        contactType: "shelter",
+        message: "Capacity at 94%. Request reassignment protocol for incoming family units.",
+        status: "pending",
+      },
+      {
+        name: "Elias Ward",
+        sector: "harvest",
+        location: "Hydroponics Bay C",
+        contactType: "supplies",
+        message: "Seed stock running low on fast-grow legumes. Need resupply from central stores.",
+        status: "pending",
+      },
+      {
+        name: "Comms Relay Alpha",
+        sector: "signal",
+        location: "Tower Ridge Antenna",
+        contactType: "comms",
+        message: "Lost contact with Sector 03 patrol. Request broadcast on emergency frequency.",
+        status: "resolved",
       },
     ],
   });
