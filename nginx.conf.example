@@ -1,0 +1,22 @@
+# Drop this block inside your existing Nginx config
+# (usually /etc/nginx/sites-available/archive)
+#
+# Replace: your-domain.com  OR  your-vps-ip
+
+server {
+    listen 80;
+    server_name your-domain.com;   # ← change this
+
+    # Max upload size for knowledge base documents
+    client_max_body_size 50M;
+
+    location / {
+        proxy_pass         http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+}

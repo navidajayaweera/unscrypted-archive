@@ -1,0 +1,7 @@
+# Force LF for shell scripts — CRLF will break them on Linux
+*.sh text eol=lf
+
+# Force LF for Docker files
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+.dockerignore text eol=lf

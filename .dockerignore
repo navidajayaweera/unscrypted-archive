@@ -1,0 +1,32 @@
+# Dependencies (rebuilt inside Docker)
+node_modules
+
+# Next.js build output (rebuilt inside Docker)
+.next
+
+# Git
+.git
+.gitignore
+
+# Local DB files (data lives in Docker volumes)
+*.db
+prisma/dev.db
+
+# Local env (DATABASE_URL is set via docker-compose environment)
+.env
+.env.local
+.env.development
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs
+README.md
+ARCHIVE_TEAM_TASKS.md
+AGENTS.md
+CLAUDE.md
