@@ -10,6 +10,7 @@ const navItems = [
   { href: "/shelters", label: "Shelter Locations", icon: "◆", short: "SHLT" },
   { href: "/tutorials", label: "Tutorials", icon: "◇", short: "TUTS" },
   { href: "/assistant", label: "Archive AI", icon: "◌", short: "AI" },
+  { href: "/api-docs",  label: "API Docs",   icon: "◫", short: "API" },
 ];
 
 const sysLines = [
