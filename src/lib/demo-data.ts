@@ -46,6 +46,141 @@ export const DEMO_KNOWLEDGE: Knowledge[] = [
     tags: "tech,engineering",
     uploadedAt: "2031-08-22T11:15:00Z",
   },
+  {
+    id: "demo-k6",
+    title: "Improvised Antibiotic Production",
+    description:
+      "Extraction and preparation of penicillin from bread mould cultures using salvaged lab equipment. Includes dosage guidelines and contraindication list.",
+    filePath: "",
+    tags: "medical,survival",
+    uploadedAt: "2031-09-05T09:10:00Z",
+  },
+  {
+    id: "demo-k7",
+    title: "Solar Panel Array Wiring Guide",
+    description:
+      "Series vs parallel configurations for 12 V and 24 V systems. Charge controller sizing, battery bank calculations, and inverter selection.",
+    filePath: "",
+    tags: "engineering,tech",
+    uploadedAt: "2031-09-28T13:40:00Z",
+  },
+  {
+    id: "demo-k8",
+    title: "Seed Vault Preservation Handbook",
+    description:
+      "Long-term seed storage using airtight containers, silica gel desiccants, and cool dark vaults. Germination testing schedules and variety priority list.",
+    filePath: "",
+    tags: "agricultural,farming,survival",
+    uploadedAt: "2031-10-14T07:55:00Z",
+  },
+  {
+    id: "demo-k9",
+    title: "Structural Integrity Assessment",
+    description:
+      "Visual inspection checklist for post-event buildings. Crack classification, load-bearing wall identification, and safe demolition of collapse-risk sections.",
+    filePath: "",
+    tags: "engineering,construction",
+    uploadedAt: "2031-11-02T10:20:00Z",
+  },
+  {
+    id: "demo-k10",
+    title: "Underground Ventilation Design",
+    description:
+      "Passive and powered airflow systems for bunkers. Carbon dioxide build-up thresholds, fan sizing, and NBC filter maintenance intervals.",
+    filePath: "",
+    tags: "engineering,construction",
+    uploadedAt: "2031-11-18T15:05:00Z",
+  },
+  {
+    id: "demo-k11",
+    title: "Radiation Exposure & Decontamination",
+    description:
+      "Dose thresholds, shelter-in-place protocols, and decontamination shower procedures. KI tablet dosage chart and fallout decay rate reference table.",
+    filePath: "",
+    tags: "medical,survival",
+    uploadedAt: "2031-12-01T08:00:00Z",
+  },
+  {
+    id: "demo-k12",
+    title: "Composting in Enclosed Spaces",
+    description:
+      "Vermicomposting and bokashi methods adapted for sealed bunker grow-rooms. Odour control, harvest timing, and nutrient content benchmarks.",
+    filePath: "",
+    tags: "agricultural,farming",
+    uploadedAt: "2031-12-20T12:30:00Z",
+  },
+  {
+    id: "demo-k13",
+    title: "Water Well Drilling Manual",
+    description:
+      "Hand-auger and percussion drilling techniques for reaching shallow aquifers. Casing installation, grout sealing, and bacteriological testing with field kits.",
+    filePath: "",
+    tags: "engineering,survival",
+    uploadedAt: "2032-01-07T09:45:00Z",
+  },
+  {
+    id: "demo-k14",
+    title: "Perimeter Alarm Systems",
+    description:
+      "Tripwire, pressure-plate, and passive IR alarm designs using salvaged electronics. Zone mapping, watch rotation integration, and false-positive reduction.",
+    filePath: "",
+    tags: "defense,engineering",
+    uploadedAt: "2032-01-22T14:00:00Z",
+  },
+  {
+    id: "demo-k15",
+    title: "Medicinal Plant Index — Southern Region",
+    description:
+      "Identification and preparation of locally available medicinal plants. Covers anti-infective, analgesic, and wound-healing species with dosage notes.",
+    filePath: "",
+    tags: "medical,survival,agricultural",
+    uploadedAt: "2032-02-10T11:00:00Z",
+  },
+  {
+    id: "demo-k16",
+    title: "Blacksmithing Fundamentals",
+    description:
+      "Setting up a forge from salvaged components. Coal vs charcoal fuel, quenching techniques for tool steel, and priority tool fabrication list.",
+    filePath: "",
+    tags: "engineering,construction",
+    uploadedAt: "2032-02-28T08:30:00Z",
+  },
+  {
+    id: "demo-k17",
+    title: "Food Ration Calculation Tables",
+    description:
+      "Daily caloric and macronutrient requirements by activity level. Ration allocation formulas for group sizes of 10–500, including children and injured.",
+    filePath: "",
+    tags: "agricultural,survival",
+    uploadedAt: "2032-03-15T10:10:00Z",
+  },
+  {
+    id: "demo-k18",
+    title: "Archive Data Backup Protocol",
+    description:
+      "Procedures for maintaining redundant offline copies of Archive data. Verified storage media types, checksumming, and physical distribution across sectors.",
+    filePath: "",
+    tags: "tech,engineering",
+    uploadedAt: "2032-03-30T16:45:00Z",
+  },
+  {
+    id: "demo-k19",
+    title: "Field Amputation Guidelines",
+    description:
+      "Last-resort limb removal protocol for crush injuries and advanced gangrene when evacuation is impossible. Anaesthetic alternatives, tourniquet placement, and post-op care.",
+    filePath: "",
+    tags: "medical,first-aid",
+    uploadedAt: "2032-04-12T07:20:00Z",
+  },
+  {
+    id: "demo-k20",
+    title: "Sector Communication Codebook v3",
+    description:
+      "Standardised brevity codes, authentication challenges, and frequency allocation table for inter-sector radio operations. Supersedes v2 codebook.",
+    filePath: "",
+    tags: "tech,defense",
+    uploadedAt: "2032-04-25T13:00:00Z",
+  },
 ];
 
 export const DEMO_SURVIVORS: Survivor[] = [
