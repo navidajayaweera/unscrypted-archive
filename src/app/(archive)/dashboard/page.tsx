@@ -164,7 +164,7 @@ export default function DashboardPage() {
               className="card-glow rounded border border-amber-900/25 bg-zinc-900/50 p-4 transition-all duration-200"
             >
               <p className="text-[10px] tracking-[0.2em] text-zinc-600">{m.label}</p>
-              <p className={`mt-2 font-mono text-3xl font-bold ${m.color} glow-amber`}>
+              <p className={`mt-2 font-mono text-3xl font-bold ${m.color} ${m.color.includes("emerald") ? "glow-green" : "glow-amber"}`}>
                 {String(m.value).padStart(2, "0")}
               </p>
             </div>
