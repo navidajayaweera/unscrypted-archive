@@ -660,6 +660,15 @@ function ParamTable({ params }: { params: Param[] }) {
 
 function EndpointCard({ ep }: { ep: Endpoint }) {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(ep.path).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }
 
   return (
     <div className="rounded border border-zinc-800/70 bg-zinc-900/30 transition-all duration-200 hover:border-zinc-700/70">
@@ -670,6 +679,19 @@ function EndpointCard({ ep }: { ep: Endpoint }) {
       >
         <MethodBadge method={ep.method} />
         <span className="flex-1 font-mono text-sm text-zinc-200">{ep.path}</span>
+        {/* Copy button */}
+        <span
+          role="button"
+          onClick={handleCopy}
+          title="Copy path"
+          className={`shrink-0 rounded border px-2 py-0.5 text-[10px] font-mono tracking-widest transition-colors cursor-pointer select-none
+            ${copied
+              ? "border-emerald-700/60 bg-emerald-950/40 text-emerald-400"
+              : "border-zinc-700/50 bg-zinc-800/40 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300"
+            }`}
+        >
+          {copied ? "✓ COPIED" : "COPY"}
+        </span>
         <span className="hidden text-xs text-zinc-600 sm:block">{ep.description.slice(0, 60)}{ep.description.length > 60 ? "…" : ""}</span>
         <span className={`ml-2 shrink-0 text-xs font-mono transition-transform ${open ? "rotate-90" : ""} text-zinc-600`}>
           ▶
