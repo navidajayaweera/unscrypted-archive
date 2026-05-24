@@ -4,11 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/",           label: "Dashboard",        icon: "◈", short: "DASH" },
-  { href: "/knowledge",  label: "Knowledge Base",   icon: "◉", short: "KNOW" },
-  { href: "/survivors",  label: "Survivor Registry",icon: "◎", short: "SURV" },
-  { href: "/shelters",   label: "Shelter Locations",icon: "◆", short: "SHLT" },
-  { href: "/tutorials",  label: "Tutorials",        icon: "◇", short: "TUTS" },
+  { href: "/dashboard", label: "Dashboard", icon: "◈", short: "DASH" },
+  { href: "/knowledge", label: "Knowledge Base", icon: "◉", short: "KNOW" },
+  { href: "/survivors", label: "Survivor Registry", icon: "◎", short: "SURV" },
+  { href: "/shelters", label: "Shelter Locations", icon: "◆", short: "SHLT" },
+  { href: "/tutorials", label: "Tutorials", icon: "◇", short: "TUTS" },
 ];
 
 const sysLines = [
@@ -25,11 +25,13 @@ export default function Sidebar() {
     <aside className="flex w-56 shrink-0 flex-col border-r border-amber-900/25 bg-[#060606]">
       {/* Brand */}
       <div className="border-b border-amber-900/25 px-4 py-5">
-        <p className="text-[10px] tracking-[0.3em] text-amber-700/70 mb-0.5">PROTOCOL</p>
-        <p className="text-sm font-bold tracking-widest text-amber-500 glow-amber">
-          UNsCRYPTED
-        </p>
-        <p className="text-[10px] tracking-widest text-zinc-600 mt-1">DOMAIN 05 // ARCHIVE</p>
+        <Link href="/" className="block hover:opacity-90 transition-opacity">
+          <p className="text-[10px] tracking-[0.3em] text-amber-700/70 mb-0.5">PROTOCOL</p>
+          <p className="text-sm font-bold tracking-widest text-amber-500 glow-amber">
+            UNsCRYPTED
+          </p>
+          <p className="text-[10px] tracking-widest text-zinc-600 mt-1">DOMAIN 05 // ARCHIVE</p>
+        </Link>
       </div>
 
       {/* Nav */}
@@ -38,8 +40,7 @@ export default function Sidebar() {
           NAVIGATION
         </p>
         {navItems.map((item) => {
-          const isActive =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
           return (
             <Link
