@@ -1,41 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { prisma } from '@/lib/db'
 
 // GET all survivors (with optional ?skill= filter)
 export async function GET(req: NextRequest) {
-  const skill = req.nextUrl.searchParams.get('skill')
+  try {
+    const skill = req.nextUrl.searchParams.get('skill')
 
-  const survivors = await db.survivor.findMany({
-    include: { skills: true },
-    where: skill ? {
-      skills: {
-        some: { category: skill }
-      }
-    } : undefined
-  })
+    const survivors = await prisma.survivor.findMany({
+      include: { skills: true },
+      where: skill
+        ? { skills: { some: { category: skill } } }
+        : undefined,
+      orderBy: { registeredAt: 'desc' },
+    })
 
-  return NextResponse.json(survivors)
+    return NextResponse.json(survivors)
+  } catch (error) {
+    console.error('GET /api/survivors error:', error)
+    return NextResponse.json({ error: 'Failed to fetch survivors' }, { status: 500 })
+  }
 }
 
 // POST register new survivor + skills
 export async function POST(req: NextRequest) {
-  const body = await req.json()
-  const { name, age, sector, skills } = body
+  try {
+    const body = await req.json()
+    const { name, age, sector, skills } = body
 
-  const survivor = await db.survivor.create({
-    data: {
-      name,
-      age,
-      sector,
-      skills: {
-        create: skills.map((s: { name: string; category: string }) => ({
-          name: s.name,
-          category: s.category
-        }))
-      }
-    },
-    include: { skills: true }
-  })
+    if (!name || !age || !sector) {
+      return NextResponse.json({ error: 'Name, age, and sector are required' }, { status: 400 })
+    }
 
-  return NextResponse.json(survivor, { status: 201 })
+    const survivor = await prisma.survivor.create({
+      data: {
+        name,
+        age: Number(age),
+        sector,
+        skills: {
+          create: (skills ?? []).map((s: { name: string; category: string }) => ({
+            name: s.name,
+            category: s.category,
+          })),
+        },
+      },
+      include: { skills: true },
+    })
+
+    return NextResponse.json(survivor, { status: 201 })
+  } catch (error) {
+    console.error('POST /api/survivors error:', error)
+    return NextResponse.json({ error: 'Failed to register survivor' }, { status: 500 })
+  }
 }
