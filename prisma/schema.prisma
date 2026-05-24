@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Knowledge {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  filePath    String
+  tags        String
+  uploadedAt  DateTime @default(now())
+}
+
+model Survivor {
+  id           String   @id @default(cuid())
+  name         String
+  age          Int
+  sector       String
+  registeredAt DateTime @default(now())
+  skills       Skill[]
+}
+
+model Skill {
+  id         String   @id @default(cuid())
+  name       String
+  category   String
+  survivor   Survivor @relation(fields: [survivorId], references: [id], onDelete: Cascade)
+  survivorId String
+}
