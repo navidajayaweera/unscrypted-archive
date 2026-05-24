@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/ui/Modal";
+import TerminalLoader from "@/components/ui/TerminalLoader";
 import { CATEGORY_COLORS, DIFFICULTY_COLORS, excerpt, inputClass, labelClass } from "@/lib/utils";
 import { DEMO_TUTORIALS } from "@/lib/demo-data";
 import type { Tutorial } from "@/types";
@@ -27,12 +28,14 @@ export default function TutorialsPage() {
   const [activeCategory, setActiveCategory] = useState("");
   const [modalOpen, setModalOpen]       = useState(false);
   const [isDemo, setIsDemo]             = useState(false);
+  const [loading, setLoading]           = useState(true);
   const [form, setForm]                 = useState({
     title: "", category: "first-aid", content: "", difficulty: "beginner",
   });
   const [submitting, setSubmitting]     = useState(false);
 
   const load = useCallback(async () => {
+    setLoading(true);
     try {
       const url = activeCategory
         ? `/api/tutorials?category=${activeCategory}`
@@ -53,6 +56,8 @@ export default function TutorialsPage() {
     } catch {
       setTutorials(DEMO_TUTORIALS);
       setIsDemo(true);
+    } finally {
+      setLoading(false);
     }
   }, [activeCategory]);
 
@@ -118,7 +123,10 @@ export default function TutorialsPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <TerminalLoader label="SURVIVAL_TUTORIALS" endpoint="/api/tutorials" />
+      ) : null}
+      <div className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${loading ? "hidden" : ""}`}>
         {tutorials.map((t) => (
           <Link
             key={t.id}
@@ -150,7 +158,7 @@ export default function TutorialsPage() {
             </p>
           </Link>
         ))}
-        {tutorials.length === 0 && (
+        {!loading && tutorials.length === 0 && (
           <div className="col-span-3 py-12 text-center text-xs text-zinc-700 font-mono">
             — NO TUTORIALS FOUND —
           </div>

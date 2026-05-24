@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/ui/Modal";
+import TerminalLoader from "@/components/ui/TerminalLoader";
 import { formatDate, inputClass, labelClass } from "@/lib/utils";
 import { DEMO_KNOWLEDGE } from "@/lib/demo-data";
 import type { Knowledge } from "@/types";
@@ -15,11 +16,13 @@ export default function KnowledgePage() {
   const [activeTag, setActiveTag] = useState("All");
   const [modalOpen, setModalOpen] = useState(false);
   const [isDemo, setIsDemo]       = useState(false);
+  const [loading, setLoading]     = useState(true);
   const [form, setForm]           = useState({ title: "", description: "", tags: "" });
   const [file, setFile]           = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async () => {
+    setLoading(true);
     try {
       const tag = activeTag === "All" ? "" : activeTag.toLowerCase();
       const url = tag ? `/api/knowledge?tag=${tag}` : "/api/knowledge";
@@ -40,6 +43,8 @@ export default function KnowledgePage() {
     } catch {
       setDocuments(DEMO_KNOWLEDGE);
       setIsDemo(true);
+    } finally {
+      setLoading(false);
     }
   }, [activeTag]);
 
@@ -122,7 +127,10 @@ export default function KnowledgePage() {
       </div>
 
       {/* Grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <TerminalLoader label="KNOWLEDGE_BASE" endpoint="/api/knowledge" />
+      ) : null}
+      <div className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${loading ? "hidden" : ""}`}>
         {filtered.map((doc) => (
           <div
             key={doc.id}
@@ -163,7 +171,7 @@ export default function KnowledgePage() {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <div className="col-span-3 py-12 text-center text-xs text-zinc-700 font-mono">
             — NO RECORDS FOUND —
           </div>

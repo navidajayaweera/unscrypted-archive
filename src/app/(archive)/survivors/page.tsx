@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/ui/Modal";
+import TerminalLoader from "@/components/ui/TerminalLoader";
 import { formatDate, inputClass, labelClass, SKILL_COLORS } from "@/lib/utils";
 import { DEMO_SURVIVORS } from "@/lib/demo-data";
 import type { Survivor } from "@/types";
@@ -16,11 +17,13 @@ export default function SurvivorsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [modalOpen, setModalOpen]     = useState(false);
   const [isDemo, setIsDemo]           = useState(false);
+  const [loading, setLoading]         = useState(true);
   const [form, setForm]               = useState({ name: "", age: "", sector: "" });
   const [skills, setSkills]           = useState<SkillEntry[]>([{ name: "", category: "medical" }]);
   const [submitting, setSubmitting]   = useState(false);
 
   const load = useCallback(async () => {
+    setLoading(true);
     try {
       const skill = activeCategory === "All" ? "" : activeCategory.toLowerCase();
       const url   = skill ? `/api/survivors?skill=${skill}` : "/api/survivors";
@@ -42,6 +45,8 @@ export default function SurvivorsPage() {
     } catch {
       setSurvivors(DEMO_SURVIVORS);
       setIsDemo(true);
+    } finally {
+      setLoading(false);
     }
   }, [activeCategory]);
 
@@ -128,7 +133,10 @@ export default function SurvivorsPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <TerminalLoader label="SURVIVOR_REGISTRY" endpoint="/api/survivors" />
+      ) : null}
+      <div className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${loading ? "hidden" : ""}`}>
         {filtered.map((s) => (
           <Link
             key={s.id}
@@ -169,7 +177,7 @@ export default function SurvivorsPage() {
             </div>
           </Link>
         ))}
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <div className="col-span-3 py-12 text-center text-xs text-zinc-700 font-mono">
             — NO SURVIVORS FOUND —
           </div>

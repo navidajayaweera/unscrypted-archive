@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Modal from "@/components/ui/Modal";
+import TerminalLoader from "@/components/ui/TerminalLoader";
 import { inputClass, labelClass, STATUS_COLORS } from "@/lib/utils";
 import { DEMO_SHELTERS } from "@/lib/demo-data";
 import type { Shelter } from "@/types";
@@ -19,12 +20,14 @@ export default function SheltersPage() {
   const [activeStatus, setActiveStatus] = useState("All");
   const [modalOpen, setModalOpen]     = useState(false);
   const [isDemo, setIsDemo]           = useState(false);
+  const [loading, setLoading]         = useState(true);
   const [form, setForm]               = useState({
     name: "", description: "", lat: "", lng: "", capacity: "", status: "active",
   });
   const [submitting, setSubmitting]   = useState(false);
 
   const load = useCallback(async () => {
+    setLoading(true);
     try {
       const res  = await fetch("/api/shelters");
       if (!res.ok) throw new Error("api-error");
@@ -39,6 +42,8 @@ export default function SheltersPage() {
     } catch {
       setShelters(DEMO_SHELTERS);
       setIsDemo(true);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -114,7 +119,10 @@ export default function SheltersPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <TerminalLoader label="SHELTER_LOCATIONS" endpoint="/api/shelters" />
+      ) : null}
+      <div className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${loading ? "hidden" : ""}`}>
         {filtered.map((s) => (
           <div
             key={s.id}
@@ -150,7 +158,7 @@ export default function SheltersPage() {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <div className="col-span-3 py-12 text-center text-xs text-zinc-700 font-mono">
             — NO SHELTERS FOUND —
           </div>
