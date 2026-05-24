@@ -783,7 +783,7 @@ export default function ApiDocsPage() {
           </h2>
         </div>
         <p className="mt-0.5 text-xs text-zinc-600">
-          {totalEndpoints} endpoints — base URL: <span className="font-mono text-zinc-500">http://localhost:3000</span>
+          {totalEndpoints} endpoints — base URL: <span className="font-mono text-zinc-500">http://69.28.90.158:3001</span>
           &nbsp;// all responses are JSON
         </p>
       </div>
